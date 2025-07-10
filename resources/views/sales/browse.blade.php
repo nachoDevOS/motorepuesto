@@ -1,6 +1,6 @@
 @extends('voyager::master')
 
-@section('page_title', 'Viendo Cajas')
+@section('page_title', 'Viendo Ventas')
 
 @section('page_header')
     <div class="container-fluid">
@@ -10,12 +10,12 @@
                     <div class="panel-body" style="padding: 0px">
                         <div class="col-md-8" style="padding: 0px">
                             <h1 class="page-title">
-                                <i class="fa-solid fa-cash-register"></i> Cajas
+                                <i class="fa-solid fa-cart-shopping"></i> Ventas
                             </h1>
                         </div>
                         <div class="col-md-4 text-right" style="margin-top: 30px">
-                            @if (auth()->user()->hasPermission('add_people'))
-                            <a href="{{ route('cashiers.create') }}" class="btn btn-success">
+                            @if (auth()->user()->hasPermission('add_sales'))
+                            <a href="{{ route('sales.create') }}" class="btn btn-success">
                                 <i class="voyager-plus"></i> <span>Crear</span>
                             </a>
                             @endif
@@ -34,7 +34,7 @@
                 <div class="panel panel-bordered">
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-sm-9">
+                            <div class="col-sm-10">
                                 <div class="dataTables_length" id="dataTable_length">
                                     <label>Mostrar <select id="select-paginate" class="form-control input-sm">
                                         <option value="10">10</option>
@@ -44,8 +44,7 @@
                                     </select> registros</label>
                                 </div>
                             </div>
-                     
-                            <div class="col-sm-3" style="margin-bottom: 10px">
+                            <div class="col-sm-2" style="margin-bottom: 10px">
                                 <input type="text" id="input-search" placeholder="🔍 Buscar..." class="form-control">
                             </div>
                         </div>
@@ -70,14 +69,8 @@
 
 @section('css')
     <style>
-    .image-expandable {
-        transition: transform 0.5s ease; /* Suaviza la animación */
-        width: 200px; /* Tamaño inicial */
-    }
+
     
-    .image-expandable:hover {
-        transform: scale(2); /* Aumenta un 20% el tamaño */
-    }
     </style>
 @stop
 
@@ -89,7 +82,7 @@
         var countPage = 10, order = 'id', typeOrder = 'desc';
         $(document).ready(() => {
             list();
-
+            
             $('#input-search').on('keyup', function(e){
                 if(e.keyCode == 13) {
                     list();
@@ -105,10 +98,9 @@
 
         function list(page = 1){
             $('#div-results').loading({message: 'Cargando...'});
-            let url = '{{ url("admin/cashiers/list/ajax") }}';
+
+            let url = '{{ url("admin/people/ajax/list") }}';
             let search = $('#input-search').val() ? $('#input-search').val() : '';
-        
-            
 
             $.ajax({
                 // url: `${url}/${search}?paginate=${countPage}&page=${page}`,

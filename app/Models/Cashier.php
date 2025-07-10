@@ -32,5 +32,32 @@ class Cashier extends Model
     ];
 
 
+    public function userCashier()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function registerCashier()
+    {
+        return $this->belongsTo(User::class, 'registerUser_id');
+    }
+
+    public function cashierMovements()
+    {
+        return $this->hasMany(CashierMovement::class, 'cashier_id');
+    }
+
+    public function cashierDetails()
+    {
+        return $this->hasMany(CashierDetail::class, 'cashier_id');
+    }
+
+
+    // Para poder obtener el primer registro
+    public function cashierDetailsOne(){
+        return $this->hasOne(CashierDetail::class, 'cashier_id');
+    }
+
+
  
 }

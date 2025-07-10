@@ -8,6 +8,7 @@ use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\SaleController;
 use App\Models\Item;
 
 /*
@@ -39,7 +40,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['loggin', 'system']], functi
 
     // Route::get('cashiers', [CashierController::class, 'index'])->name('cashiers.index');
     Route::resource('cashiers', CashierController::class);
-    // Route::get('brands/ajax/list', [BrandController::class, 'list']);
+    Route::get('cashiers/list/ajax', [CashierController::class, 'list'])->name('cashiers.list');
+    Route::post('cashiers/{cashier}/change/status', [CashierController::class, 'change_status'])->name('cashiers.change.status');//*** Para que los cajeros Acepte o rechase el dinero dado por Boveda o gerente
+    Route::get('cashiers/{cashier}/print/open', [CashierController::class, 'print_open'])->name('print.open');
+
+
+
+    Route::resource('sales', SaleController::class);
+    Route::get('sales/ajax/list', [SaleController::class, 'list']);
+    Route::get('sales/item/stock/ajax', [AjaxController::class, 'itemStockList']);//Para obtener los item que hay disponible en el inventario
+
+
+
+
+    
 
     Route::get('people', [PersonController::class, 'index'])->name('voyager.people.index');
     Route::get('people/ajax/list', [PersonController::class, 'list']);

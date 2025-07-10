@@ -33,6 +33,11 @@ class ItemStock extends Model
     {
         return $this->belongsTo(Item::class, 'itemSale_id')->withTrashed();
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id')->withTrashed();
+    }
     public function register()
     {
         return $this->belongsTo(User::class, 'registerUser_id');

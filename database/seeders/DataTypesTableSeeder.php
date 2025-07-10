@@ -132,8 +132,8 @@ class DataTypesTableSeeder extends Seeder
                 'id' => 14,
                 'name' => 'brands',
                 'slug' => 'brands',
-                'display_name_singular' => 'Marca',
-                'display_name_plural' => 'Marcas',
+                'display_name_singular' => 'Marca/Motocicleta',
+                'display_name_plural' => 'Marcas/Motocicletas',
                 'icon' => 'fa-solid fa-copyright',
                 'model_name' => 'App\\Models\\Brand',
                 'policy_name' => NULL,
@@ -141,9 +141,9 @@ class DataTypesTableSeeder extends Seeder
                 'description' => NULL,
                 'generate_permissions' => 1,
                 'server_side' => 0,
-                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null}',
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2025-07-09 19:34:16',
-                'updated_at' => '2025-07-09 19:34:16',
+                'updated_at' => '2025-07-10 11:19:03',
             ),
             7 => 
             array (
@@ -161,7 +161,7 @@ class DataTypesTableSeeder extends Seeder
                 'server_side' => 0,
                 'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
                 'created_at' => '2025-07-09 21:39:28',
-                'updated_at' => '2025-07-09 21:56:41',
+                'updated_at' => '2025-07-10 11:14:58',
             ),
             8 => 
             array (

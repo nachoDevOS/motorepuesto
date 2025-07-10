@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\ItemStock;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
@@ -31,9 +34,11 @@ class ItemController extends Controller
         $search = request('search') ?? null;
         $paginate = request('paginate') ?? 10;
         $category_id = request('category') ?? null;
+        $user = Auth::user();
 
-        $data = Item::with(['category', 'presentation', 'itemStocks'=>function($q){
-                            $q->where('deleted_at', null);
+        $data = Item::with(['category', 'presentation', 'itemStocks'=>function($q)use($user){
+                            $q->where('deleted_at', null)
+                            ->whereRaw($user->branch_id? "branch_id = $user->branch_id" : 1);
                         }])
                         ->where(function($query) use ($search){
                             $query->OrwhereHas('category', function($query) use($search){
@@ -58,14 +63,20 @@ class ItemController extends Controller
     {
         $this->custom_authorize('read_items');
 
-        $item = Item::with(['category', 'presentation', 'itemStocks'=>function($q){
-                $q->orderBy('id', 'DESC');
+        $user = Auth::user();
+        $branches = Branch::where('deleted_at', null)
+            ->whereRaw($user->branch_id? "id = $user->branch_id" : 1)
+            ->get();
+
+        $item = Item::with(['category', 'presentation', 'itemStocks'=>function($q)use($user){
+                $q->orderBy('id', 'DESC')
+                ->whereRaw($user->branch_id? "branch_id = $user->branch_id" : 1);
             }])
             ->where('id', $id)
             ->where('deleted_at', null)
             ->first();
 
-        return view('parameters.items.read', compact('item'));
+        return view('parameters.items.read', compact('item', 'branches'));
     }
 
 
@@ -75,6 +86,7 @@ class ItemController extends Controller
         DB::beginTransaction();
         try {
             ItemStock::create([
+                'branch_id'=>$request->branch_id,
                 'item_id' => $id,
                 'quantity' =>  $request->quantity,
                 'stock' => $request->quantity,

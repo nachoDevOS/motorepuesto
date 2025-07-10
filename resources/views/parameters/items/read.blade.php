@@ -71,7 +71,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="panel panel-bordered">
                     <div class="panel-body">
                         <div class="row">
@@ -96,6 +96,7 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:5px">N&deg;</th>
+                                                <th style="text-align: center; width:30%">Sucursal</th>
                                                 <th style="text-align: center; width:15%">Cant. Ingresada</th>
                                                 <th style="text-align: center; width:15%">Cant. Disponible</th>
                                                 <th style="text-align: center">Detalles</th>                     
@@ -111,12 +112,8 @@
                                             @forelse ($item->itemStocks as $value)
                                                 <tr>
                                                     <td>{{ $i }}</td>
-                                                    <td style="text-align: right">                                                    
-                                                        {{-- @if ($item->deleted_at)
-                                                            <del style="color: red">{{number_format($item->quantity, 2, ',', '.')}}</del>
-                                                        @else
-                                                            {{number_format($item->quantity, 2, ',', '.')}}
-                                                        @endif --}}
+                                                    <td>{{ $value->branch->name }}</td>
+                                                    <td style="text-align: right">     
                                                         {{number_format($value->quantity, 2, ',', '.')}}
                                                     </td>
                                                     <td style="text-align: right">    
@@ -153,7 +150,7 @@
                                                 @endphp
                                             @empty
                                                 <tr>
-                                                    <td colspan="6">
+                                                    <td colspan="7">
                                                         <h5 class="text-center" style="margin-top: 50px">
                                                             <img src="{{ asset('images/empty.png') }}" width="120px" alt="" style="opacity: 0.8">
                                                             <br><br>
@@ -196,6 +193,15 @@
                     <div class="modal-body">
                         @csrf
                         <div class="row">
+                            <div class="form-group col-md-8">
+                                <label for="branch_id">Surcursal</label>
+                                <select name="branch_id" id="branch_id" class="form-control select2" required>
+                                    <option value="" selected disabled>--Seleccione una opción--</option>
+                                    @foreach ($branches as $item)
+                                        <option value="{{$item->id}}">{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="form-group col-md-4">
                                 <label for="full_name">Cantidad a Ingresar</label>
                                 <input style="text-align: right" type="number" step="1" min="1" name="quantity" class="form-control" value="1" required>

@@ -1681,7 +1681,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 0,
                 'details' => '{"validation":{"rule":"max:191"},"display":{"width":4},"model":"App\\\\Models\\\\Category","table":"categories","type":"belongsTo","column":"category_id","key":"id","label":"name","pivot_table":"branches","pivot":"0","taggable":"0"}',
-                'order' => 3,
+                'order' => 4,
             ),
             104 => 
             array (
@@ -1689,7 +1689,7 @@ class DataRowsTableSeeder extends Seeder
                 'data_type_id' => 15,
                 'field' => 'item_belongsto_brand_relationship',
                 'type' => 'relationship',
-                'display_name' => 'Marcas',
+                'display_name' => 'Marcas / Motocicletas',
                 'required' => 1,
                 'browse' => 1,
                 'read' => 1,
@@ -1697,7 +1697,7 @@ class DataRowsTableSeeder extends Seeder
                 'add' => 1,
                 'delete' => 0,
                 'details' => '{"validation":{"rule":"max:191"},"display":{"width":4},"model":"App\\\\Models\\\\Brand","table":"brands","type":"belongsTo","column":"brand_id","key":"id","label":"name","pivot_table":"branches","pivot":"0","taggable":"0"}',
-                'order' => 4,
+                'order' => 3,
             ),
             105 => 
             array (

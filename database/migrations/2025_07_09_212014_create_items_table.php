@@ -13,14 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('branches', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->nullable()->constrained('categories');
+            $table->foreignId('brand_id')->nullable()->constrained('brands');
+            $table->foreignId('presentation_id')->nullable()->constrained('presentations');
+            $table->string('image')->nullable();
             $table->string('name')->nullable();
-            $table->string('phone')->nullable();
-            $table->text('address')->nullable();
+            $table->decimal('price', 10,2)->nullable();
+            $table->text('observation')->nullable();
 
-            $table->timestamps();     
+            $table->smallInteger('status')->default(1);
 
+            $table->timestamps();            
             $table->foreignId('registerUser_id')->nullable()->constrained('users');
             $table->string('registerRole')->nullable();
 
@@ -38,6 +43,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('branches');
+        Schema::dropIfExists('items');
     }
 };

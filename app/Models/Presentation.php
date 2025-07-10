@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\RegistersUserEvents;
 
-class Brand extends Model
+class Presentation extends Model
 {
     use HasFactory, RegistersUserEvents, SoftDeletes;
 
@@ -15,7 +15,6 @@ class Brand extends Model
 
     protected $fillable = [
         'name',
-        'image',
         'observation',
         'status',
 

@@ -7,17 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\RegistersUserEvents;
 
-class Brand extends Model
+class CashierMovement extends Model
 {
-    use HasFactory, RegistersUserEvents, SoftDeletes;
+
+    use HasFactory, SoftDeletes, RegistersUserEvents;
 
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name',
-        'image',
+        'cashier_id',
+        'amount',
         'observation',
+        'type',
         'status',
+        // 'transferCashier_id',
 
         'registerUser_id',
         'registerRole',

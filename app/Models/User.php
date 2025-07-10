@@ -26,6 +26,7 @@ class User extends \TCG\Voyager\Models\User
         'email',
         'password',
         'status',
+        'branch_id',
         
         'registerUser_id',
         'registerRole',

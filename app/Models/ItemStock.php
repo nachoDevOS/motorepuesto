@@ -7,17 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\RegistersUserEvents;
 
-class Brand extends Model
+class ItemStock extends Model
 {
     use HasFactory, RegistersUserEvents, SoftDeletes;
 
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'name',
-        'image',
+        'branch_id',
+        'item_id',
+        'quantity',
+        'stock',
+        'type',
         'observation',
-        'status',
 
         'registerUser_id',
         'registerRole',
@@ -26,4 +28,14 @@ class Brand extends Model
         'deleteRole',
         'deleteObservation',
     ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'itemSale_id')->withTrashed();
+    }
+    public function register()
+    {
+        return $this->belongsTo(User::class, 'registerUser_id');
+    }
+
 }

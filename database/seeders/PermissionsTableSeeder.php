@@ -50,11 +50,25 @@ class PermissionsTableSeeder extends Seeder
 
         Permission::generateFor('users');
 
-        Permission::generateFor('posts');
-        Permission::generateFor('categories');
-        Permission::generateFor('pages');
 
-        
+        $permissions = [
+            'browse_cashiers' => 'Ver lista de cajas',
+            'read_cashiers' => 'Ver detalles de cajas',
+            'edit_cashiers' => 'Editar información de cajas',
+            'add_cashiers' => 'Agregar nuevas cajas',
+            'delete_cashiers' => 'Eliminar cajas',
+        ];
+
+        foreach ($permissions as $key => $description) {
+            Permission::firstOrCreate([
+                'key'        => $key,
+                'keyDescription'=> $description,
+                'table_name' => 'cashiers',
+                'tableDescription'=>'Cajas'
+            ]);
+        }
+
+
 
         // Administracion
         $permissions = [
@@ -73,6 +87,102 @@ class PermissionsTableSeeder extends Seeder
                 'tableDescription'=>'Personas'
             ]);
         }
+
+
+
+
+        // ##################################################       PARAMETROS      ################################################
+        $permissions = [
+            'browse_presentations' => 'Ver lista de presentación',
+            'read_presentations' => 'Ver detalles de presentación',
+            'edit_presentations' => 'Editar información de presentación',
+            'add_presentations' => 'Agregar nuevas presentación',
+            'delete_presentations' => 'Eliminar presentación',
+        ];
+
+        foreach ($permissions as $key => $description) {
+            Permission::firstOrCreate([
+                'key'        => $key,
+                'keyDescription'=> $description,
+                'table_name' => 'presentations',
+                'tableDescription'=>'Presentación'
+            ]);
+        }
+
+        $permissions = [
+            'browse_categories' => 'Ver lista de categorias',
+            'read_categories' => 'Ver detalles de categorias',
+            'edit_categories' => 'Editar información de categorias',
+            'add_categories' => 'Agregar nuevas categorias',
+            'delete_categories' => 'Eliminar categorias',
+        ];
+
+        foreach ($permissions as $key => $description) {
+            Permission::firstOrCreate([
+                'key'        => $key,
+                'keyDescription'=> $description,
+                'table_name' => 'categories',
+                'tableDescription'=>'Categorias'
+            ]);
+        }
+
+        $permissions = [
+            'browse_brands' => 'Ver lista de marcas',
+            'read_brands' => 'Ver detalles de marcas',
+            'edit_brands' => 'Editar información de marcas',
+            'add_brands' => 'Agregar nuevas marcas',
+            'delete_brands' => 'Eliminar marcas',
+        ];
+
+        foreach ($permissions as $key => $description) {
+            Permission::firstOrCreate([
+                'key'        => $key,
+                'keyDescription'=> $description,
+                'table_name' => 'brands',
+                'tableDescription'=>'Marcas'
+            ]);
+        }
+
+        $permissions = [
+            'browse_items' => 'Ver lista de accesorios / items',
+            'read_items' => 'Ver detalles de accesorios / items',
+            'edit_items' => 'Editar información de accesorios / items',
+            'add_items' => 'Agregar nuevos accesorios / items',
+            'delete_items' => 'Eliminar accesorios / items',
+        ];
+
+        foreach ($permissions as $key => $description) {
+            Permission::firstOrCreate([
+                'key'        => $key,
+                'keyDescription'=> $description,
+                'table_name' => 'items',
+                'tableDescription'=>'Accesorios /Items'
+            ]);
+        }
+
+
+
+
+        // ##################################################       HERRAMIENTAS      ################################################
+        $permissions = [
+            'browse_branches' => 'Ver lista de sucursales',
+            'read_branches' => 'Ver detalles de sucursales',
+            'edit_branches' => 'Editar información de sucursales',
+            'add_branches' => 'Agregar nuevas sucursales',
+            'delete_branches' => 'Eliminar sucursales',
+        ];
+
+        foreach ($permissions as $key => $description) {
+            Permission::firstOrCreate([
+                'key'        => $key,
+                'keyDescription'=> $description,
+                'table_name' => 'branches',
+                'tableDescription'=>'Sucursales'
+            ]);
+        }
+
+
+
 
      
 

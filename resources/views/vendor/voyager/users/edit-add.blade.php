@@ -75,6 +75,20 @@
                                 @endif
                                 <input type="password" class="form-control" id="password" name="password" value="" autocomplete="new-password">
                             </div>
+                            @if($dataTypeContent)
+                                @if ($dataTypeContent->id != 1 && $dataTypeContent->id!=2)
+                                    <div class="form-group">
+                                    <label for="branch_id">Sucursal</label>
+                                    <select name="branch_id" id="branch_id" class="form-control select2" required>
+                                        <option value="" disabled >--Seleccione una opción--</option>
+                                        @foreach(\App\Models\Branch::where('deleted_at', null)->get() as $item)
+                                            <option value="{{ $item->id }}" @if($dataTypeContent) {{$dataTypeContent->branch_id==$item->id?'selected':''}} @endif>{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
+                            @endif
+                            
                             @php
                                 $rol_id = Auth::user()->role->id;
                                 $role = TCG\Voyager\Models\Role::whereRaw($rol_id!=1? 'id != 1':1)

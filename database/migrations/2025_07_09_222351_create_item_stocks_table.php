@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('branches', function (Blueprint $table) {
+        Schema::create('item_stocks', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('phone')->nullable();
-            $table->text('address')->nullable();
+            $table->foreignId('branch_id')->nullable()->constrained('branches');
+            $table->foreignId('item_id')->nullable()->constrained('items');
+            $table->decimal('quantity', 10, 2)->nullable();
+            $table->decimal('stock', 10, 2)->nullable();
+            $table->string('type')->nullable(); //Ingreso, Egreso
+            $table->text('observation')->nullable();
 
-            $table->timestamps();     
-
+            $table->timestamps();            
             $table->foreignId('registerUser_id')->nullable()->constrained('users');
             $table->string('registerRole')->nullable();
 
@@ -38,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('branches');
+        Schema::dropIfExists('item_stocks');
     }
 };

@@ -13,14 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('branches', function (Blueprint $table) {
+        Schema::create('cashiers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('phone')->nullable();
-            $table->text('address')->nullable();
+            $table->foreignId('branch_id')->nullable()->constrained('branches');
+            $table->foreignId('user_id')->nullable()->constrained('users');//Para identificar a que usuario le pertenece la caja creada
+            $table->string('title')->nullable();
+            $table->text('observation')->nullable();
+            $table->string('status')->nullable();
+            
+            $table->dateTime('open_at')->nullable(); 
+            $table->datetime('closed_at')->nullable();
+            $table->foreignId('closeUser_id')->nullable()->constrained('users');
 
-            $table->timestamps();     
-
+            $table->timestamps();            
             $table->foreignId('registerUser_id')->nullable()->constrained('users');
             $table->string('registerRole')->nullable();
 
@@ -38,6 +43,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('branches');
+        Schema::dropIfExists('cashiers');
     }
 };

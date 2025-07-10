@@ -61,6 +61,7 @@ class UserController extends Controller
             
             User::create([
                 'person_id' => $request->person_id,
+                'branch_id' => $request->branch_id,
                 'name' =>  $person->first_name,
                 'role_id' => $request->role_id,
                 'email' => $request->email,
@@ -87,6 +88,13 @@ class UserController extends Controller
             $user->update([
                 'status'=> $request->status?1:0,
             ]);
+
+            if($request->branch_id)
+            {
+                $user->update([
+                    'branch_id' => $request->branch_id,
+                ]);
+            }
             
             if($request->role_id)
             {

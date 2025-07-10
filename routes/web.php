@@ -6,6 +6,9 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AjaxController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CashierController;
+use App\Http\Controllers\ItemController;
+use App\Models\Item;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,11 +37,21 @@ Route::get('/info/{id?}', [ErrorController::class , 'error'])->name('errors');
 Route::group(['prefix' => 'admin', 'middleware' => ['loggin', 'system']], function () {
     Voyager::routes();
 
+    // Route::get('cashiers', [CashierController::class, 'index'])->name('cashiers.index');
+    Route::resource('cashiers', CashierController::class);
+    // Route::get('brands/ajax/list', [BrandController::class, 'list']);
+
     Route::get('people', [PersonController::class, 'index'])->name('voyager.people.index');
     Route::get('people/ajax/list', [PersonController::class, 'list']);
 
     Route::get('brands', [BrandController::class, 'index'])->name('voyager.brands.index');
     Route::get('brands/ajax/list', [BrandController::class, 'list']);
+
+    Route::get('items', [ItemController::class, 'index'])->name('voyager.items.index');
+    Route::get('items/ajax/list', [ItemController::class, 'list']);
+    Route::get('items/{id}', [ItemController::class, 'show'])->name('voyager.items.show');
+    Route::post('items/{id}/stock', [ItemController::class, 'storeStock'])->name('items-stock.store');
+    Route::delete('items/{id}/stock/{stock}', [ItemController::class, 'destroyStock'])->name('items-stock.destroy');
 
 
 
@@ -63,8 +76,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['loggin', 'system']], functi
 Route::get('/admin/clear-cache', function() {
     Artisan::call('optimize:clear');
 
-    // Artisan::call('db:seed', ['--class' => 'UpdateBreadSeeder']);
-    // Artisan::call('db:seed', ['--class' => 'UpdatePermissionsSeeder']);
+    Artisan::call('db:seed', ['--class' => 'UpdateBreadSeeder']);
+    Artisan::call('db:seed', ['--class' => 'UpdatePermissionsSeeder']);
     
     return redirect('/admin/profile')->with(['message' => 'Cache eliminada.', 'alert-type' => 'success']);
 })->name('clear.cache');

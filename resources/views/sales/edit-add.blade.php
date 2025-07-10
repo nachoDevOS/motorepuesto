@@ -58,7 +58,6 @@
                                             <tr>
                                                 <th style="width: 30px">N&deg;</th>
                                                 <th>Detalles</th>
-                                                <th style="text-align: center; width:10%">Stock<br>Disponible</th>
                                                 <th style="text-align: center; width:15%">Precio</th>
                                                 <th style="text-align: center; width:12%">Cantidad</th>
                                                 <th style="text-align: center; width:10%">Subtotal</th>
@@ -67,7 +66,7 @@
                                         </thead>
                                         <tbody id="table-body">
                                             <tr id="tr-empty">
-                                                <td colspan="7" style="height: 240px">
+                                                <td colspan="6" style="height: 240px">
                                                     <h4 class="text-center text-muted" style="margin-top: 50px">
                                                         <i class="glyphicon glyphicon-shopping-cart" style="font-size: 50px"></i> <br><br>
                                                         Lista de venta vacía
@@ -295,12 +294,7 @@
                                 <td class="td-item"></td>
                                 <td>
                                     <b class="label-description" id="description-${product.id}">${product.item.name}<br>
-                                    <small> ${product.item.unit_type.name} - ${product.item.unit_type.shape} | ${product.item.item_category.name} a Bs. ${product.price}</small>
-                                    <input type="hidden" name="product_id[]" value="${product.id}" />
-                                    <input type="hidden" name="item[]" value="${product.item.id}" />
-                                </td>
-                                <td style="text-align: right">
-                                    <h4 class="label-stock" id="label-stock-${product.id}">${product.stock}</h4>
+                                    <input type="hidden" name="item[]" value="${product.id}" />
                                 </td>
                                 <td width="150px">
                                     <input type="number" style="text-align: right" name="price[]" class="form-control" id="input-price-${product.id}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" value="${product.priceSale}" min="0.1" step="0.01" required/>
@@ -424,8 +418,9 @@
                                 <img src="${image}" width="60px" />
                             </div>
                             <div>
-                                <b style="font-size: 16px">${option.name} a <small>Bs. ${option.price}</small>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<span><b>Stock</b>: ${option.total_stock}</span></b><br>
-                                <span><b>Descripción</b>: ${option.observation}</span>
+                                <b style="font-size: 15px">${option.name}&nbsp&nbsp|&nbsp&nbsp<small>Bs. ${option.price} c/u</small>&nbsp&nbsp|&nbsp&nbsp<small>Stock. ${option.total_stock}</small></b><br>
+                                <span style="font-size: 13px"><b>Categoría</b>: ${option.category.name}</span><br>
+                                <span style="font-size: 13px"><b>Marca/Motocicleta</b>: ${option.brand.name}</span><br>
                             </div>
                         </div>`);
 

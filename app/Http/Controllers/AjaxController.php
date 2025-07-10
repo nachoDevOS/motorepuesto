@@ -6,6 +6,7 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Models\Person;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AjaxController extends Controller
 {
@@ -46,12 +47,14 @@ class AjaxController extends Controller
     // Para obtener los item del inventario que hay en stock
     public function itemStockList(){
         $search = request('q');
-            
-        $data = Item::with(['itemStocks' => function($q) {
-                $q->whereNull('deleted_at');
-            }, 'brand'])
-            ->withSum(['itemStocks as total_stock' => function($query) {
-                $query->whereNull('deleted_at');
+        $user = Auth::user();
+        $data = Item::with(['itemStocks' => function($q)use($user) {
+                $q->where('deleted_at', null)
+                ->whereRaw($user->branch_id? "branch_id = $user->branch_id" : 1);
+            }, 'brand', 'category', 'presentation'])
+            ->withSum(['itemStocks as total_stock' => function($query)use($user) {
+                $query->where('deleted_at', null)
+                ->whereRaw($user->branch_id? "branch_id = $user->branch_id" : 1);
             }], 'stock')
             ->Where(function($query) use ($search){
                 if($search){

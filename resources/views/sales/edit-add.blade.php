@@ -51,7 +51,7 @@
                                     <select class="form-control" id="select-product_id"></select>
                                 </div>
                             </div>
-                            <div class="col-md-12" style="height: 300px; max-height: 300px; overflow-y: auto">
+                            <div class="col-md-12" style="height: 800px; max-height: 400px; overflow-y: auto">
                                 <div class="table-responsive">
                                     <table id="dataTable" class="table table-bordered table-hover">
                                         <thead>
@@ -66,7 +66,7 @@
                                         </thead>
                                         <tbody id="table-body">
                                             <tr id="tr-empty">
-                                                <td colspan="6" style="height: 240px">
+                                                <td colspan="6" style="height: 320px">
                                                     <h4 class="text-center text-muted" style="margin-top: 50px">
                                                         <i class="glyphicon glyphicon-shopping-cart" style="font-size: 50px"></i> <br><br>
                                                         Lista de venta vacía
@@ -120,20 +120,16 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="date">Monto recibido</label>
-                                <input type="number" name="amountReceived" id="input-amount" style="text-align: right" min="0" value="0" step="0.01" class="form-control" placeholder="Monto recibo Bs." required>
+                                <input type="number" name="amountReceived" id="amountReceived" style="text-align: right" min="0" value="0" step="0.01" class="form-control" placeholder="Monto recibo Bs." required>
                             </div>
                         
-                            <div class="form-group col-md-6">
-                            </div>
-
-                            {{-- <div class="form-group col-md-6">
-                                <h2 class="text-right"><small>Total: Bs.</small> <b id="label-total">0.00</b></h2>
-                                <input type="hidden" id="amountTotalSale" name="amountTotalSale" value="0">
+                            {{-- <div class="form-group col-md-4">
                             </div> --}}
 
-                            <div class="form-group col-md-6">
-                                <h3 class="text-right" id="change-message" style="display: none;"><small>Cambio: Bs.</small> <b id="change-amount">0.00</b></h3>
+
+                            <div class="form-group col-md-12">
                                 <h3 class="text-right" id="change-message-error" style="display: none;"><small  style="color: red !important">Ingrese un Monto igual o mayor al total de la venta</small></h3>
+                                <h3 class="text-right" id="change-message"><small>Cambio: Bs.</small> <b id="change-amount">0.00</b></h3>
                                 <h3 class="text-right"><small>Total a cobrar: Bs.</small> <b id="label-total">0.00</b></h3>
                                 <input type="hidden" id="amountTotalSale" name="amountTotalSale" value="0">
                             </div>
@@ -286,40 +282,99 @@
                     return opt.name;
                 }
             }).change(function(){
+
                 if($('#select-product_id option:selected').val()){
                     let product = productSelected;
+                    // alert(product.id)
+                    let image = "{{ asset('images/default.jpg') }}";
+                    if(product.image){
+                        image = "{{ asset('storage') }}/"+product.image.replace('.', '-medium.');
+                    }
                     if($('.table').find(`#tr-item-${product.id}`).val() === undefined){
                         $('#table-body').append(`
                             <tr class="tr-item" id="tr-item-${product.id}">
                                 <td class="td-item"></td>
                                 <td>
-                                    <b class="label-description" id="description-${product.id}">${product.item.name}<br>
-                                    <input type="hidden" name="item[]" value="${product.id}" />
+                                    <input type="hidden" name="products[${product.id}][id]" value="${product.id}"/>
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="margin-right: 15px; flex-shrink: 0;">
+                                            <img src="${image}" width="60px" style="border-radius: 4px;"/>
+                                        </div>
+                                        <div style="flex-grow: 1;">
+                                            <div style="font-size: 14px; font-weight: bold; margin-bottom: 1px;">${product.name}</div>
+                                            <div style="margin-bottom: 0px;"><small>Categoría: ${product.category.name}</small></div>
+                                            <div style="color: #666;"><b>Marca/Motocicleta:</b> ${product.brand.name}</div>
+                                        </div>
+                                    </div>
                                 </td>
-                                <td width="150px">
-                                    <input type="number" style="text-align: right" name="price[]" class="form-control" id="input-price-${product.id}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" value="${product.priceSale}" min="0.1" step="0.01" required/>
+                                <td width="100px" style="vertical-align: middle;">
+                                    <input type="number" name="products[${product.id}][price]" step="0.1" min="0.5" style="text-align: right" class="form-control" id="input-price-${product.id}" value="${product.price}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" required/>
                                 </td>
-                                <td width="100px">
-                                    <input type="number" name="quantity[]" style="text-align: right" class="form-control" id="input-quantity-${product.id}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" value="1" min="1" max="${product.stock}" step="1" required/>
+                                <td width="100px" style="vertical-align: middle;">
+                                    <input type="number" name="products[${product.id}][quantity]" step="1" min="1" style="text-align: right" class="form-control" id="input-quantity-${product.id}" value="1" max="${product.total_stock}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" required/>
                                 </td>
-                                <td width="120px" class="text-right">
-                                    <h4 class="label-subtotal" id="label-subtotal-${product.id}">${product.price}</h4>
-                                    <input type="hidden" name="subTotal[]" id="subTotal-${product.id}" value="${product.item.id}" />
 
+                                <td width="120px" class="text-right">
+                                    <input type="hidden" name="products[${product.id}][subtotal]" id="subTotal-${product.id}" />
+                                    <h4 class="label-subtotal" id="label-subtotal-${product.id}">${product.price}</h4>
                                 </td>
-                                <td width="50px" class="text-right"><button type="button" onclick="removeTr(${product.id})" class="btn btn-link"><i class="voyager-trash text-danger"></i></button></td>
+                                <td width="50px" class="text-right" style="vertical-align: middle;">
+                                    <button type="button" onclick="removeTr(${product.id})" class="btn btn-link">
+                                        <i class="voyager-trash text-danger"></i>
+                                    </button>
+                                </td>
                             </tr>
                         `);
 
                         setNumber();
                         getSubtotal(product.id);
+
                         $(`#select-price-${product.id}`).select2({tags: true});
+                        
+                        
+                        toastr.success(`+1 ${product.name}`, 'Producto agregado');
                     }else{
                         toastr.info('EL producto ya está agregado', 'Información')
                     }
 
                     $('#select-product_id').val('').trigger('change');
                 }
+
+
+                // if($('#select-product_id option:selected').val()){
+                //     let product = productSelected;
+                //     if($('.table').find(`#tr-item-${product.id}`).val() === undefined){
+                //         $('#table-body').append(`
+                //             <tr class="tr-item" id="tr-item-${product.id}">
+                //                 <td class="td-item"></td>
+                //                 <td>
+                //                     <b class="label-description" id="description-${product.id}">${product.item.name}<br>
+                //                     <input type="hidden" name="products[${product.id}][id]" value="${product.id}" />
+                //                 </td>
+                //                 <td width="150px">
+                //                     <input type="number" style="text-align: right" name="products[${product.id}][price]" class="form-control" id="input-price-${product.id}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" value="${product.priceSale}" min="0.1" step="0.01" required/>
+                //                 </td>
+                //                 <td width="100px">
+                //                     <input type="number" name="quantity[]" style="text-align: right" class="form-control" id="input-quantity-${product.id}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" value="1" min="1" max="${product.stock}" step="1" required/>
+                //                 </td>
+                //                 <td width="120px" class="text-right">
+                //                     <h4 class="label-subtotal" id="label-subtotal-${product.id}">${product.price}</h4>
+                //                     <input type="hidden" name="subTotal[]" id="subTotal-${product.id}" value="${product.item.id}" />
+
+                //                 </td>
+                //                 <td width="50px" class="text-right"><button type="button" onclick="removeTr(${product.id})" class="btn btn-link"><i class="voyager-trash text-danger"></i></button></td>
+                //             </tr>
+                //         `);
+
+                //         setNumber();
+                //         getSubtotal(product.id);
+                //         $(`#select-price-${product.id}`).select2({tags: true});
+                //     }else{
+                //         toastr.info('EL producto ya está agregado', 'Información')
+                //     }
+
+                //     $('#select-product_id').val('').trigger('change');
+                // }
             });
 
 
@@ -333,18 +388,17 @@
             });
 
 
-
-            $('#input-discount').keyup(function(){
-                getTotal();
-            });
-
-            $('#input-discount').change(function(){
-                getTotal();
-            });
-
            
 
            
+        });
+
+        $('#amountReceived').on('click', function () {
+            $('#amountReceived').val('');
+        });
+
+        $('#amountReceived').on('change keyup', function() {
+            calculateChange();
         });
 
         function getSubtotal(id){
@@ -367,17 +421,34 @@
 
         function getTotal(){
             let total = 0;
-            let discount = $('#input-discount').val() ? parseFloat($('#input-discount').val()) : 0;
+            // let discount = $('#input-discount').val() ? parseFloat($('#input-discount').val()) : 0;
             $(".label-subtotal").each(function(index) {
                 total += parseFloat($(this).text());
             });
-            $('#input-discount').attr('max', total.toFixed(2));
+            $('#amountReceived').attr('min', total.toFixed(2));
+            $('#amountReceived').val((total).toFixed(2));
 
-            $('#label-total').text((total - discount).toFixed(2));
-            $('#amountTotalSale').val((total - discount).toFixed(2));
 
-            $('#input-amount').val((total - discount).toFixed(2));
-            $('#input-amount').attr('max', (total - discount).toFixed(2));
+            $('#label-total').text((total).toFixed(2));
+            $('#amountTotalSale').val((total).toFixed(2));
+
+            calculateChange();
+        }
+
+        // Función para calcular y mostrar el cambio
+        function calculateChange() {
+            const amountReceived = parseFloat($('#amountReceived').val()) || 0;
+            const total = parseFloat($('#amountTotalSale').val()) || 0;
+            const change = amountReceived - total;
+            
+            if (amountReceived >= total) {
+                $('#change-message-error').hide();
+                $('#change-amount').text(change.toFixed(2));
+            }
+            else {
+                $('#change-message-error').show();
+                $('#change-amount').text(0);
+            }
         }
 
         function setNumber(){
@@ -394,12 +465,19 @@
                 $('#tr-empty').fadeIn('fast');
             }
         }
-
         function removeTr(id){
             $(`#tr-item-${id}`).remove();
             $('#select-product_id').val("").trigger("change");
             setNumber();
             getTotal();
+
+            // $('#change-message-error').hide();
+
+            // $('#change-message').hide();
+            // $('#change-message-error').show();
+
+            toastr.info('Producto eliminado del carrito', 'Eliminado');
+
         }
 
         function formatResultProducts(option){

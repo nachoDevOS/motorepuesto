@@ -61,6 +61,12 @@ class AjaxController extends Controller
                     $query->OrwhereHas('brand', function($query) use($search){
                         $query->whereRaw($search ? 'name like "%'.$search.'%"' : 1);
                     })
+                    ->OrwhereHas('category', function($query) use($search){
+                        $query->whereRaw($search ? 'name like "%'.$search.'%"' : 1);
+                    })
+                    ->OrwhereHas('presentation', function($query) use($search){
+                        $query->whereRaw($search ? 'name like "%'.$search.'%"' : 1);
+                    })
                     ->OrWhereRaw($search ? "id like '%$search%'" : 1)
                     ->OrWhereRaw($search ? "name like '%$search%'" : 1);
                 }

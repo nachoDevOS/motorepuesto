@@ -67,7 +67,7 @@ class SaleController extends Controller
     // }
     public function generarNumeroFactura($typeSale)
     {
-        $prefix = $typeSale == 'Venta'? 'V':'PRO-';
+        $prefix = $typeSale == 'Venta'? 'VTA-':'PRO-';
         $fecha = now()->format('Ymd');
         $count = Sale::withTrashed()
                     ->where('typeSale', $typeSale)

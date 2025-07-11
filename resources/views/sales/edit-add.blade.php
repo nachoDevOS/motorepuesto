@@ -122,56 +122,24 @@
                                 <label for="date">Monto recibido</label>
                                 <input type="number" name="amountReceived" id="amountReceived" style="text-align: right" min="0" value="0" step="0.01" class="form-control" placeholder="Monto recibo Bs." required>
                             </div>
-                        
-                            {{-- <div class="form-group col-md-4">
-                            </div> --}}
-
 
                             <div class="form-group col-md-12">
                                 <h3 class="text-right" id="change-message-error" style="display: none;"><small  style="color: red !important">Ingrese un Monto igual o mayor al total de la venta</small></h3>
                                 <h3 class="text-right" id="change-message"><small>Cambio: Bs.</small> <b id="change-amount">0.00</b></h3>
                                 <h3 class="text-right"><small>Total a cobrar: Bs.</small> <b id="label-total">0.00</b></h3>
                                 <input type="hidden" id="amountTotalSale" name="amountTotalSale" value="0">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" required>Confirmar registro..!
+                                </label>
                             </div>
-
-
-
                             <div class="form-group col-md-12 text-center">
-                                <button type="button" id="btn-submit" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal-confirm">Vender <i class="voyager-basket"></i></button>
-                               
+                                <button type="submit" id="btn-submit" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal-confirm">Registrar <i class="voyager-basket"></i></button>
                                 <a href="{{ route('sales.index') }}" >Volver a la lista</a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-        
-                <div class="modal fade" data-backdrop="static" id="modal-confirm" role="dialog">
-                    <div class="modal-dialog modal-primary">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" style="color:rgb(255, 255, 255) !important"><i class="fa-solid fa-cart-shopping"></i> ¿Estás seguro que quieres registrar?</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="payment_type">Método de pago</label>
-                                    <select name="payment_type" id="select-payment_type" class="form-control" required>
-                                        <option value="" disabled selected>Seleccionar método de pago</option>
-                                        <option value="Efectivo">Efectivo</option>
-                                        <option value="Qr">Qr/Transferencia</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                <input type="submit" class="btn btn-primary btn-confirm" id="btn-confirm" value="Confirmar">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-          
+            </div>          
         </form>
     </div>
 
@@ -240,6 +208,17 @@
     <script src="{{ asset('vendor/tippy/popper.min.js') }}"></script>
     <script src="{{ asset('vendor/tippy/tippy-bundle.umd.min.js') }}"></script>
     <script>
+        document.getElementById('form-sale').addEventListener('submit', function(e) {
+            // Validar el formulario manualmente si es necesario
+            if(this.checkValidity()) {
+                const submitBtn = document.getElementById('btn-submit');
+                submitBtn.innerHTML = 'Registrando <i class="voyager-basket"></i>';
+                submitBtn.disabled = true;
+            }
+            // Si no pasa la validación, el formulario no se enviará y el botón no cambiará
+        });
+    </script>
+    <script>
         var productSelected, customerSelected;
  
         $(document).ready(function(){
@@ -258,7 +237,6 @@
                 },
                 quietMillis: 250,
                 minimumInputLength: 2,
-                
                 ajax: {
                     url: "{{ url('admin/sales/item/stock/ajax') }}",      
 
@@ -339,58 +317,11 @@
 
                     $('#select-product_id').val('').trigger('change');
                 }
-
-
-                // if($('#select-product_id option:selected').val()){
-                //     let product = productSelected;
-                //     if($('.table').find(`#tr-item-${product.id}`).val() === undefined){
-                //         $('#table-body').append(`
-                //             <tr class="tr-item" id="tr-item-${product.id}">
-                //                 <td class="td-item"></td>
-                //                 <td>
-                //                     <b class="label-description" id="description-${product.id}">${product.item.name}<br>
-                //                     <input type="hidden" name="products[${product.id}][id]" value="${product.id}" />
-                //                 </td>
-                //                 <td width="150px">
-                //                     <input type="number" style="text-align: right" name="products[${product.id}][price]" class="form-control" id="input-price-${product.id}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" value="${product.priceSale}" min="0.1" step="0.01" required/>
-                //                 </td>
-                //                 <td width="100px">
-                //                     <input type="number" name="quantity[]" style="text-align: right" class="form-control" id="input-quantity-${product.id}" onkeyup="getSubtotal(${product.id})" onchange="getSubtotal(${product.id})" value="1" min="1" max="${product.stock}" step="1" required/>
-                //                 </td>
-                //                 <td width="120px" class="text-right">
-                //                     <h4 class="label-subtotal" id="label-subtotal-${product.id}">${product.price}</h4>
-                //                     <input type="hidden" name="subTotal[]" id="subTotal-${product.id}" value="${product.item.id}" />
-
-                //                 </td>
-                //                 <td width="50px" class="text-right"><button type="button" onclick="removeTr(${product.id})" class="btn btn-link"><i class="voyager-trash text-danger"></i></button></td>
-                //             </tr>
-                //         `);
-
-                //         setNumber();
-                //         getSubtotal(product.id);
-                //         $(`#select-price-${product.id}`).select2({tags: true});
-                //     }else{
-                //         toastr.info('EL producto ya está agregado', 'Información')
-                //     }
-
-                //     $('#select-product_id').val('').trigger('change');
-                // }
             });
-
-
-            
-
-       
-
             $('#form-sale').submit(function(e){
                 $('.btn-confirm').val('Guardando...');
                 $('.btn-confirm').attr('disabled', true);
             });
-
-
-           
-
-           
         });
 
         $('#amountReceived').on('click', function () {
@@ -411,10 +342,9 @@
             getTotal();
         }
 
-
         function funtion_typeSale() {
             let typeSale = $('#typeSale').val();
-            $('#input-amount').attr('readonly', typeSale=='Venta'?false:true);
+            $('#amountReceived').attr('readonly', typeSale=='Venta'?false:true);
             $('#select-payment_type').attr('readonly', typeSale=='Venta'?false:true);
             // getTotal();
         }
@@ -471,11 +401,6 @@
             setNumber();
             getTotal();
 
-            // $('#change-message-error').hide();
-
-            // $('#change-message').hide();
-            // $('#change-message-error').show();
-
             toastr.info('Producto eliminado del carrito', 'Eliminado');
 
         }
@@ -501,10 +426,7 @@
                                 <span style="font-size: 13px"><b>Marca/Motocicleta</b>: ${option.brand.name}</span><br>
                             </div>
                         </div>`);
-
-                        
         }
-
 
         $('#trash-person').on('click', function () {
             $('#input-dni').val('');

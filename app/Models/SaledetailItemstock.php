@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\RegistersUserEvents;
 
-class Transaction extends Model
+class SaledetailItemstock extends Model
 {
     use HasFactory, RegistersUserEvents, SoftDeletes;
 
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'type',
-        'status',
+        'saleDetail_id',
+        'itemStock_id',
+        'quantity',
 
         'registerUser_id',
         'registerRole',

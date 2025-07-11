@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\RegistersUserEvents;
 
-class Transaction extends Model
+class SaleTransaction extends Model
 {
     use HasFactory, RegistersUserEvents, SoftDeletes;
 
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'type',
-        'status',
+        'transaction_id',
+        'sale_id',
+        'amount',
 
         'registerUser_id',
         'registerRole',
@@ -24,4 +25,9 @@ class Transaction extends Model
         'deleteRole',
         'deleteObservation',
     ];
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class, 'transaction_id');
+    }
 }
